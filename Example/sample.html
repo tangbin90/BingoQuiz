@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz UI</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="quiz-container">
+    <!-- 顶部栏 -->
+    <header class="quiz-header">
+      <div class="logo">algo<span>ed</span></div>
+      <h1>Dartmouth Philosophy Society Quiz Competition</h1>
+      <div class="status-bar">
+        <span class="score">Current Score: <strong>10/12</strong></span>
+        <span class="timer">⏱ 03:45</span>
+        <button class="exit-btn">Exit Quiz</button>
+      </div>
+    </header>
+
+    <!-- 题目内容 -->
+    <main class="quiz-main">
+      <div class="question-info">
+        <span>Question 2 of 100</span>
+        <div class="progress-bar"><div class="progress"></div></div>
+      </div>
+      <h2 class="question-text">
+        Which philosopher is most closely associated with the idea of the 
+        "veil of ignorance" in the context of justice and fairness?
+      </h2>
+      <div class="options">
+        <label class="option selected"><input type="radio" name="q"/>Immanuel Kant</label>
+        <label class="option"><input type="radio" name="q"/>John Stuart Mill</label>
+        <label class="option"><input type="radio" name="q"/>John Rawls</label>
+        <label class="option"><input type="radio" name="q"/>Robert Nozick</label>
+      </div>
+    </main>
+
+    <!-- 底部按钮 -->
+    <footer class="quiz-footer">
+      <button class="reset-btn">Reset response</button>
+      <button class="next-btn">Save & Next →</button>
+    </footer>
+  </div>
+</body>
+</html>

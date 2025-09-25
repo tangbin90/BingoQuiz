@@ -1,0 +1,135 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9fb;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.quiz-container {
+  max-width: 800px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  padding: 20px 40px;
+}
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.quiz-header .logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #4a4aef;
+}
+.quiz-header .logo span {
+  color: #f33;
+}
+
+.quiz-header h1 {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  margin: 0;
+}
+
+.status-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.score strong {
+  color: #22c55e;
+}
+
+.exit-btn {
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.quiz-main {
+  margin-top: 20px;
+}
+
+.question-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #666;
+}
+
+.progress-bar {
+  background: #eee;
+  border-radius: 4px;
+  height: 6px;
+  width: 100%;
+  overflow: hidden;
+}
+.progress {
+  width: 20%; /* 根据进度调整 */
+  height: 100%;
+  background: #2563eb;
+}
+
+.question-text {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.options {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.option {
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #f9fafb;
+}
+.option.selected {
+  border: 2px solid #2563eb;
+  background: #e0e7ff;
+}
+
+.option input {
+  margin-right: 8px;
+}
+
+.quiz-footer {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.reset-btn {
+  background: #f3f4f6;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.next-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
