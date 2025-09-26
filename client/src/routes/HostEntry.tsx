@@ -24,13 +24,8 @@ export const HostEntry: React.FC = () => {
       return;
     }
 
-    let adminToken = localStorage.getItem('adminToken');
-    if (!adminToken) {
-      adminToken = prompt('Enter admin token:') || 'admin_secret_token_2024';
-      localStorage.setItem('adminToken', adminToken);
-    }
-    
-    socketManager.connect(adminToken);
+    // 管理员认证已移除，直接连接
+    socketManager.connect();
     
     const socket = socketManager.getSocket();
     const handleConnect = () => setIsConnected(true);

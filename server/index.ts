@@ -24,7 +24,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
 });
 
 const PORT = process.env.PORT || 3001;
-const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'admin_secret_token_2024';
 
 // 中间件
 app.use(cors());
@@ -34,24 +33,7 @@ app.use(express.static(path.join(__dirname, '../client/dist')));
 // 会话存储
 const sessionStore = new SessionStore();
 
-// 检查admin认证的辅助函数
-const checkAdminAuth = (socket: any): boolean => {
-  const token = socket.handshake?.auth?.adminToken;
-  console.log('🔐 Admin auth check:', {
-    token: token,
-    expected: ADMIN_TOKEN,
-    match: token === ADMIN_TOKEN
-  });
-  
-  if (token === ADMIN_TOKEN) {
-    socket.isAdmin = true;
-    console.log('✅ Admin authenticated successfully');
-    return true;
-  } else {
-    console.log('❌ Admin authentication failed');
-    return false;
-  }
-};
+// 管理员认证已完全移除 - 所有管理员操作直接允许
 
 // Static Quiz自动跳转逻辑
 const setupStaticQuizAutoAdvance = (sessionId: string, session: any, io: any) => {
@@ -187,6 +169,7 @@ io.on('connection', (socket) => {
       if (userId !== 'host') {
         sessionStore.addParticipant(sessionId, userId, name);
         sessionStore.updateLeaderboard(sessionId);
+        console.log(`👥 Added participant: ${userId} (${name}), total participants: ${session.participants.size}`);
       }
       
       // 对于Static Quiz，如果没有startedAt，为这个参与者设置开始时间
@@ -212,16 +195,33 @@ io.on('connection', (socket) => {
         quizType: session.quizType
       });
       
-      // 通知其他参与者（只有非Host用户才广播）
+      // 通知所有参与者（包括新加入的用户和管理员）
       if (userId !== 'host') {
-        socket.to(sessionId).emit('participants:update', {
+        console.log('📤 Broadcasting participants:update to all participants in session:', sessionId);
+        const participantData = {
           count: session.participants.size,
           items: Array.from(session.participants.entries()).map(([id, p]) => ({ userId: id, name: p.name }))
-        });
+        };
+        console.log('📤 Participant data:', participantData);
+        
+        // 广播给所有连接到这个session的用户（包括管理员）
+        io.to(sessionId).emit('participants:update', participantData);
         
         // 广播排行榜更新
         console.log('📤 Broadcasting leaderboard:update for new participant:', sessionId);
         io.to(sessionId).emit('leaderboard:update', {
+          sessionId,
+          items: session.leaderboard
+        });
+      } else {
+        // 如果是管理员，也发送当前的参与者信息
+        console.log('📤 Sending current participants to admin:', sessionId);
+        const participantData = {
+          count: session.participants.size,
+          items: Array.from(session.participants.entries()).map(([id, p]) => ({ userId: id, name: p.name }))
+        };
+        socket.emit('participants:update', participantData);
+        socket.emit('leaderboard:update', {
           sessionId,
           items: session.leaderboard
         });
@@ -326,12 +326,8 @@ io.on('connection', (socket) => {
       quizType: data.quizType
     });
     
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for session start');
-      return;
-    }
-    
-    console.log('✅ Admin auth passed, proceeding with session creation');
+    // 管理员认证已移除，直接允许操作
+    console.log('✅ Admin operation allowed (认证已移除)');
     const { sessionId, options, questions, quizType } = data;
     
     const sessionOptions: SessionOptions = {
@@ -344,16 +340,31 @@ io.on('connection', (socket) => {
     
     const session = sessionStore.createSession(sessionId, sessionOptions, sessionQuestions, quizType || 'live');
     session.status = 'running';
-    session.currentQuestion = sessionQuestions[0];
+    
+    // 对于Live Quiz，不自动设置currentQuestion，等待管理员手动选择
+    // 对于Static Quiz，设置第一个问题
+    if (quizType === 'static') {
+      session.currentQuestion = sessionQuestions[0];
+    } else {
+      session.currentQuestion = undefined; // Live Quiz等待管理员选择
+    }
+    
+    // 管理员加入session房间，以便接收参与者更新
+    socket.join(sessionId);
+    (socket as any).userId = 'host';
+    (socket as any).sessionId = sessionId;
+    console.log(`👤 Admin joined session room: ${sessionId}`);
     
     // 对于Static Quiz，不立即设置startedAt，让参与者加入时设置
-    // 对于Live Quiz，立即设置startedAt
+    // 对于Live Quiz，也不立即设置startedAt，等管理员选择问题后再开始
     if (quizType === 'live') {
-      session.startedAt = Date.now();
-      session.timeLimit = session.currentQuestion.timeLimit || sessionOptions.defaultTimeLimit;
+      // Live Quiz不自动开始，等待管理员手动选择问题
+      session.startedAt = undefined;
+      session.timeLimit = sessionOptions.defaultTimeLimit;
+      session.currentQuestion = undefined; // 不设置默认问题，等待管理员选择
     } else {
       // Static Quiz不设置startedAt，等参与者加入时设置
-      session.timeLimit = session.currentQuestion.timeLimit || sessionOptions.defaultTimeLimit;
+      session.timeLimit = session.currentQuestion?.timeLimit || sessionOptions.defaultTimeLimit;
     }
     
     // 广播状态更新
@@ -380,10 +391,7 @@ io.on('connection', (socket) => {
 
   // 设置题目
   socket.on('admin:question:set', (data) => {
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for question set');
-      return;
-    }
+    // 管理员认证已移除，直接允许操作
     const { sessionId, questionId, question } = data;
     console.log('Admin setting question:', { sessionId, questionId, question });
     
@@ -428,10 +436,7 @@ io.on('connection', (socket) => {
 
   // 下一题
   socket.on('admin:next', (data) => {
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for next question');
-      return;
-    }
+    // 管理员认证已移除，直接允许操作
     const { sessionId } = data;
     const session = sessionStore.getSession(sessionId);
     
@@ -462,10 +467,7 @@ io.on('connection', (socket) => {
 
   // 上一题
   socket.on('admin:prev', (data) => {
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for prev question');
-      return;
-    }
+    // 管理员认证已移除，直接允许操作
     const { sessionId } = data;
     const session = sessionStore.getSession(sessionId);
     
@@ -496,10 +498,7 @@ io.on('connection', (socket) => {
 
   // 暂停计时器
   socket.on('admin:timer:pause', (data) => {
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for timer pause');
-      return;
-    }
+    // 管理员认证已移除，直接允许操作
     const { sessionId } = data;
     const session = sessionStore.getSession(sessionId);
     
@@ -512,10 +511,7 @@ io.on('connection', (socket) => {
 
   // 恢复计时器
   socket.on('admin:timer:resume', (data) => {
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for timer resume');
-      return;
-    }
+    // 管理员认证已移除，直接允许操作
     const { sessionId } = data;
     const session = sessionStore.getSession(sessionId);
     
@@ -536,10 +532,7 @@ io.on('connection', (socket) => {
 
   // 锁定答案
   socket.on('admin:answers:lock', (data) => {
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for answers lock');
-      return;
-    }
+    // 管理员认证已移除，直接允许操作
     const { sessionId } = data;
     sessionStore.updateSession(sessionId, { answersLocked: true });
     io.to(sessionId).emit('answers:locked', { sessionId });
@@ -547,10 +540,7 @@ io.on('connection', (socket) => {
 
   // 解锁答案
   socket.on('admin:answers:unlock', (data) => {
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for answers unlock');
-      return;
-    }
+    // 管理员认证已移除，直接允许操作
     const { sessionId } = data;
     sessionStore.updateSession(sessionId, { answersLocked: false });
     io.to(sessionId).emit('answers:unlocked', { sessionId });
@@ -558,20 +548,14 @@ io.on('connection', (socket) => {
 
   // 揭示答案
   socket.on('admin:reveal', (data) => {
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for reveal answer');
-      return;
-    }
+    // 管理员认证已移除，直接允许操作
     const { sessionId } = data;
     io.to(sessionId).emit('reveal:answer', { sessionId });
   });
 
   // 结束会话
   socket.on('admin:session:end', (data) => {
-    if (!checkAdminAuth(socket)) {
-      console.log('❌ Admin authentication required for session end');
-      return;
-    }
+    // 管理员认证已移除，直接允许操作
     const { sessionId } = data;
     const session = sessionStore.getSession(sessionId);
     
@@ -665,6 +649,6 @@ app.get('*', (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📊 Admin panel: http://localhost:${PORT}/host`);
+  console.log(`📊 Admin panel: http://localhost:${PORT}/`);
   console.log(`🎮 Play interface: http://localhost:${PORT}/play`);
 });

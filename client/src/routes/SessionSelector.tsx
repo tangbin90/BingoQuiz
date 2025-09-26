@@ -45,6 +45,9 @@ export const SessionSelector: React.FC = () => {
   }, []);
 
   const handleJoinSession = (sessionId: string) => {
+    // 清除该会话的本地存储，强制用户重新输入用户名
+    const storageKey = `play-session-${sessionId}`;
+    localStorage.removeItem(storageKey);
     navigate(`/play?sessionId=${sessionId}`);
   };
 

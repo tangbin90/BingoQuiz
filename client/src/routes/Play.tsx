@@ -29,6 +29,7 @@ export const Play: React.FC = () => {
   const [userId, setUserId] = useState<string>(() => storedData?.userId || generateUserId());
   const [isJoined, setIsJoined] = useState<boolean>(() => storedData?.isJoined ?? false);
   const [sessionInfo, setSessionInfo] = useState<{ quizType?: 'static' | 'live'; exists: boolean } | null>(null);
+  const [participants, setParticipants] = useState<Array<{ userId: string; name: string }>>([]);
   const hasJoinedRef = useRef(false);
 
   useEffect(() => {
@@ -114,10 +115,29 @@ export const Play: React.FC = () => {
     quizType: state.quizType,
     isStaticQuiz,
     isLiveQuiz,
-    quizTypeDetermined,
-    sessionId,
-    hasQuizType: !!state.quizType
+    quizTypeDetermined
   });
+
+  // 处理参与者更新
+  useEffect(() => {
+    if (!isConnected) return;
+
+    const socket = (window as any).socketManager?.getSocket();
+    if (!socket) return;
+
+    const handleParticipantsUpdate = (data: { count: number; items?: Array<{ userId: string; name: string }> }) => {
+      console.log('👥 Play received participants:update:', data);
+      if (data.items) {
+        setParticipants(data.items);
+      }
+    };
+
+    socket.on('participants:update', handleParticipantsUpdate);
+
+    return () => {
+      socket.off('participants:update', handleParticipantsUpdate);
+    };
+  }, [isConnected]);
 
   // Update session info when state changes
   useEffect(() => {
@@ -340,6 +360,11 @@ export const Play: React.FC = () => {
               <p className="text-sm text-gray-600">Session: {sessionId}</p>
               {name && (
                 <p className="text-xs text-gray-500">Player: {name}</p>
+              )}
+              {participants.length > 0 && (
+                <p className="text-xs text-gray-500">
+                  Participants: {participants.length} ({participants.map(p => p.name).join(', ')})
+                </p>
               )}
             </div>
             <div className="flex items-center space-x-4">

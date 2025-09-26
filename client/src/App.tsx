@@ -25,7 +25,6 @@ function App() {
           {/* 重定向 */}
           <Route path="/setup" element={<Navigate to="/" replace />} />
           <Route path="/admin" element={<Navigate to="/" replace />} />
-          <Route path="/host/:sessionId?" element={<Navigate to="/live/:sessionId?" replace />} />
         </Routes>
       </div>
     </Router>

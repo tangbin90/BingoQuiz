@@ -63,6 +63,11 @@ export const StaticQuiz: React.FC = () => {
         } catch (error) {
           console.error('Failed to parse session config:', error);
         }
+      } else {
+        // 如果没有sessionConfig，使用默认配置
+        console.log('No sessionConfig found, using default config for existing session');
+        setSessionOptions({ autoAdvance: true, defaultTimeLimit: 15 });
+        // 不设置questions，让组件从服务器获取会话信息
       }
     } else {
       loadConfigFromStorage(localStorage.getItem('sessionConfig'));
@@ -75,17 +80,8 @@ export const StaticQuiz: React.FC = () => {
       return;
     }
 
-    let adminToken = socketManager.getAdminToken() || localStorage.getItem('adminToken');
-    if (!adminToken) {
-      adminToken = prompt('Enter admin token:') || 'admin_secret_token_2024';
-      localStorage.setItem('adminToken', adminToken);
-    }
-
-    if (adminToken) {
-      socketManager.setAdminToken(adminToken);
-    }
-
-    const activeSocket = socketManager.connect(adminToken || undefined);
+    // 管理员认证已移除，直接连接
+    const activeSocket = socketManager.connect();
     setSocket(activeSocket);
 
     const handleConnect = () => {
@@ -172,29 +168,32 @@ export const StaticQuiz: React.FC = () => {
       return;
     }
 
-    if (!questions.length) {
-      console.warn('❌ Cannot start session without questions');
-      return;
+    sessionStartedRef.current = true;
+    
+    if (questions.length > 0) {
+      // 如果有questions，说明这是新创建的会话
+      console.log('📤 Starting new Static Quiz session...');
+      console.log('📤 Static Quiz session data:', {
+        sessionId: trimmedSessionId,
+        optionsCount: Object.keys(sessionOptions).length,
+        questionsCount: questions.length,
+        quizType: 'static'
+      });
+      
+      socketInstance.emit('admin:session:start', {
+        sessionId: trimmedSessionId,
+        options: sessionOptions,
+        questions: questions,
+        quizType: 'static'
+      });
+      
+      console.log('📤 admin:session:start event sent for Static Quiz');
+    } else {
+      // 如果没有questions，说明这是已存在的会话，只需要加入房间
+      console.log('📤 Joining existing Static Quiz session...');
     }
 
-    sessionStartedRef.current = true;
-    console.log('📤 Starting Static Quiz session...');
-    console.log('📤 Static Quiz session data:', {
-      sessionId: trimmedSessionId,
-      optionsCount: Object.keys(sessionOptions).length,
-      questionsCount: questions.length,
-      quizType: 'static'
-    });
-    
-    socketInstance.emit('admin:session:start', {
-      sessionId: trimmedSessionId,
-      options: sessionOptions,
-      questions: questions,
-      quizType: 'static'
-    });
-    
-    console.log('📤 admin:session:start event sent for Static Quiz');
-
+    // 管理员加入房间以接收实时更新
     socketInstance.emit('room:join', {
       sessionId: trimmedSessionId,
       userId: 'host',
@@ -202,7 +201,7 @@ export const StaticQuiz: React.FC = () => {
     });
     
     console.log('📤 room:join event sent for Static Quiz');
-    console.log('✅ Static Quiz session started:', trimmedSessionId);
+    console.log('✅ Static Quiz session joined:', trimmedSessionId);
   }, [socket, sessionId, sessionOptions, questions]);
 
   useEffect(() => {

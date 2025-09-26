@@ -32,7 +32,7 @@ export function useQuizLive(userId: string, sessionId: string) {
     console.log('🔌 useQuizLive useEffect called, isConnected:', socketManager.isConnected());
     if (!socketManager.isConnected()) {
       console.log('🔌 Participant connecting to server...');
-      socketManager.connect(); // 不传adminToken，作为participant连接
+      socketManager.connect(); // 管理员认证已移除，直接连接
     }
   }, []);
   

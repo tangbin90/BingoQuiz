@@ -129,12 +129,9 @@ export const Host: React.FC = () => {
     return () => clearInterval(timer);
   }, [serverStartedAt, serverTimeLimit, isTimerPaused, handleTimerEnd]);
 
-  // 清除保存的token并重新连接
+  // 重新连接（无需认证）
   const handleReconnect = () => {
-    localStorage.removeItem('adminToken');
-    const adminToken = prompt('Enter admin token:') || 'admin_secret_token_2024';
-    localStorage.setItem('adminToken', adminToken);
-    socketManager.connect(adminToken);
+    socketManager.connect();
   };
 
   // 连接Socket并自动启动session
@@ -200,13 +197,8 @@ export const Host: React.FC = () => {
     }
 
     // 从localStorage获取保存的token，如果没有则提示输入
-    let adminToken = localStorage.getItem('adminToken');
-    if (!adminToken) {
-      adminToken = prompt('Enter admin token:') || 'admin_secret_token_2024';
-      localStorage.setItem('adminToken', adminToken);
-    }
-    
-    socketManager.connect(adminToken);
+    // 管理员认证已移除，直接连接
+    socketManager.connect();
     
     // 监听连接状态变化
     const socket = socketManager.getSocket();
