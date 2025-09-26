@@ -77,7 +77,6 @@ npm run dev
 3. **Control Answering Process**
    - Select and set questions
    - Control timer (start/pause/resume)
-   - Lock/unlock answer submission
    - View real-time leaderboard
    - Manually jump to next question
 
