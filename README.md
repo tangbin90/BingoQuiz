@@ -335,34 +335,7 @@ node --inspect server/index.js
 - Regularly update dependencies to fix security vulnerabilities
 - Implement appropriate access control and monitoring
 
-## 📝 Changelog
 
-### v2.0.0 (2024-01-15)
-- ✨ Added Static Quiz mode
-- 📊 Added answering progress display
-- ⏱️ Implemented 3-second feedback delay
-- 🎯 Optimized Live Quiz control panel
-- 🔧 Improved type detection logic
-- 📱 Enhanced responsive design
-
-### v1.0.0 (2024-01-01)
-- 🎉 Initial version release
-- ✨ Real-time quiz core functionality
-- 🎮 Live Quiz mode
-- 📱 Responsive design
-- 🔒 Basic anti-cheating mechanism
-
-## 📞 Support and Feedback
-
-- **Documentation Issues**: Check detailed documentation in `docs/` directory
-- **Technical Support**: Submit GitHub Issues
-- **Feature Suggestions**: Propose through Issues or Discussions
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 **🎯 Start Your BingoQuiz Journey!**
 
