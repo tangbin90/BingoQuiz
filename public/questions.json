@@ -1,0 +1,72 @@
+[
+  {
+    "id": "q1",
+    "index": 1,
+    "text": "Which philosopher proposed the 'veil of ignorance'?",
+    "options": ["Immanuel Kant", "John Stuart Mill", "John Rawls", "Robert Nozick"],
+    "answer": "John Rawls"
+  },
+  {
+    "id": "q2",
+    "index": 2,
+    "text": "What is the main principle of utilitarianism?",
+    "options": ["Greatest happiness for the greatest number", "Categorical imperative", "Social contract", "Virtue ethics"],
+    "answer": "Greatest happiness for the greatest number"
+  },
+  {
+    "id": "q3",
+    "index": 3,
+    "text": "Who wrote 'The Republic'?",
+    "options": ["Aristotle", "Plato", "Socrates", "Confucius"],
+    "answer": "Plato"
+  },
+  {
+    "id": "q4",
+    "index": 4,
+    "text": "What is the categorical imperative?",
+    "options": ["A moral law that applies universally", "A rule based on consequences", "A social agreement", "A religious commandment"],
+    "answer": "A moral law that applies universally"
+  },
+  {
+    "id": "q5",
+    "index": 5,
+    "text": "Which philosopher is known for the concept of 'the state of nature'?",
+    "options": ["John Locke", "Thomas Hobbes", "Jean-Jacques Rousseau", "All of the above"],
+    "answer": "All of the above"
+  },
+  {
+    "id": "q6",
+    "index": 6,
+    "text": "What is the main focus of virtue ethics?",
+    "options": ["Rules and duties", "Consequences of actions", "Character and virtues", "Social contracts"],
+    "answer": "Character and virtues"
+  },
+  {
+    "id": "q7",
+    "index": 7,
+    "text": "Who wrote 'Leviathan'?",
+    "options": ["John Locke", "Thomas Hobbes", "Jean-Jacques Rousseau", "Immanuel Kant"],
+    "answer": "Thomas Hobbes"
+  },
+  {
+    "id": "q8",
+    "index": 8,
+    "text": "What is the difference between deontological and consequentialist ethics?",
+    "options": ["Deontological focuses on rules, consequentialist on outcomes", "Deontological focuses on outcomes, consequentialist on rules", "They are the same thing", "Deontological is religious, consequentialist is secular"],
+    "answer": "Deontological focuses on rules, consequentialist on outcomes"
+  },
+  {
+    "id": "q9",
+    "index": 9,
+    "text": "Which philosopher is associated with the 'social contract' theory?",
+    "options": ["Immanuel Kant", "John Stuart Mill", "John Rawls", "All of the above"],
+    "answer": "All of the above"
+  },
+  {
+    "id": "q10",
+    "index": 10,
+    "text": "What is the 'trolley problem' used to illustrate?",
+    "options": ["Economic theory", "Moral dilemmas and ethical reasoning", "Political philosophy", "Aesthetic judgment"],
+    "answer": "Moral dilemmas and ethical reasoning"
+  }
+]
