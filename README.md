@@ -1,162 +1,369 @@
-# Bingo Quiz - 在线答题应用
+# 🎯 BingoQuiz Real-time Quiz System
 
-一个基于React、Node.js和MySQL的现代化在线答题应用，具有用户登录、实时答题、倒计时和分数统计功能。
+A modern real-time quiz system based on React + Socket.IO, supporting Live Quiz and Static Quiz modes for multi-user synchronized competitive answering.
 
-## 功能特性
+## 📋 Table of Contents
+- [🌟 Features](#-features)
+- [🚀 Quick Start](#-quick-start)
+- [📖 User Guide](#-user-guide)
+- [🛠️ Technical Architecture](#️-technical-architecture)
+- [📚 Documentation](#-documentation)
+- [🔧 Development Guide](#-development-guide)
 
-- 🔐 用户注册和登录系统
-- 📚 从JSON文件导入题目到MySQL数据库
-- ⏰ 每道题30秒倒计时
-- 🎯 实时显示答题反馈
-- 📊 实时更新分数统计
-- 🎓 首次登录使用指引
-- 📱 响应式设计，支持移动端
+## 🌟 Features
 
-## 技术栈
+### 🎮 Core Features
+- **Dual Mode Support**: Live Quiz (real-time control) and Static Quiz (automatic mode)
+- **Real-time Synchronized Answering**: Multi-user participation with real-time leaderboard updates
+- **Smart Anti-cheating**: Each user sees different option orders to prevent copying
+- **Progress Tracking**: Static Quiz shows answering progress and total questions
+- **3-second Feedback Delay**: Static Quiz shows results after 3 seconds
+- **Responsive Design**: Perfect adaptation for desktop and mobile devices
+- **Flexible Configuration**: Customizable time limits, question content, etc.
 
-- **前端**: React 18 + TypeScript
-- **后端**: Node.js + Express
-- **数据库**: MySQL
-- **样式**: CSS3 + 渐变设计
-- **路由**: React Router
+### 🎭 User Roles
+- **Host**: Create sessions, control process, manage question bank
+- **Participant**: Join sessions, real-time answering, view rankings
 
-## 安装和运行
+### 🔧 Technical Highlights
+- WebSocket-based real-time communication
+- Full-stack TypeScript development
+- Modern React Hooks architecture
+- TailwindCSS responsive design
+- Vite fast build tool
 
-### 1. 安装依赖
+## 🚀 Quick Start
 
-```bash
-# 安装后端依赖
-npm install
+### System Requirements
+- Node.js >= 18.0.0
+- npm >= 8.0.0
+- Modern browsers (Chrome, Firefox, Safari, Edge)
 
-# 安装前端依赖
-cd client
-npm install
-cd ..
-```
-
-### 2. 数据库设置
-
-1. 确保MariaDB服务正在运行
-2. 创建数据库并导入表结构：
-
-```bash
-# 使用密码 binbingo
-mysql -u root -pbinbingo < server/database.sql
-```
-
-3. 导入题目数据：
+### Installation and Startup
 
 ```bash
-node server/import-data.js
+# 1. Clone project
+git clone <repository-url>
+cd BingoQuiz
+
+# 2. Install dependencies
+npm run install-all
+
+# 3. Start development server
+npm run dev
 ```
 
-4. 测试数据库连接：
+### Access URLs
+- **Main Entry**: http://localhost:3000 (Create and manage sessions)
+- **Participant Entry**: http://localhost:3000/play (Join sessions)
+- **Backend Service**: http://localhost:3001
+
+## 📖 User Guide
+
+### 🎭 Host Operations
+
+#### Live Quiz Mode
+1. **Access Main Entry**
+   - Visit `http://localhost:3000`
+
+2. **Create Live Quiz Session**
+   ```
+   Session ID: live-session
+   Quiz Type: Live Quiz
+   Time Limit: 15 seconds (adjustable)
+   Questions: Select from question bank or use all
+   ```
+
+3. **Control Answering Process**
+   - Select and set questions
+   - Control timer (start/pause/resume)
+   - Lock/unlock answer submission
+   - View real-time leaderboard
+   - Manually jump to next question
+
+#### Static Quiz Mode
+1. **Create Static Quiz Session**
+   ```
+   Session ID: static-session
+   Quiz Type: Static Quiz
+   Time Limit: 15 seconds (adjustable)
+   Questions: Select from question bank or use all
+   ```
+
+2. **Automatic Answering Process**
+   - System automatically displays questions in order
+   - Participants answer independently
+   - Automatic jump to next question
+   - Show answering progress
+
+### 🙋 Participant Operations
+
+1. **Join Session**
+   - Visit `http://localhost:3000/play`
+   - View available session list
+   - Select target session (shows session type and status)
+   - Enter display name
+   - Click "Join Session"
+
+2. **Live Quiz Answering**
+   - Read question content
+   - Select answer (click to submit)
+   - View immediate feedback
+   - Monitor leaderboard
+
+3. **Static Quiz Answering**
+   - Read question content
+   - Select answer
+   - Click "Save & Next" to submit
+   - Wait for 3-second feedback display
+   - Automatic jump to next question
+   - View answering progress
+
+### 🎯 Example Test Flow
 
 ```bash
-node test-database.js
-```
-
-### 3. 环境配置
-
-创建 `.env` 文件在项目根目录：
-
-```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=binbingo
-DB_NAME=bingo_quiz
-JWT_SECRET=your-super-secret-jwt-key-here
-PORT=5000
-```
-
-### 4. 启动应用
-
-```bash
-# 同时启动前端和后端
+# 1. Start system
 npm run dev
 
-# 或者分别启动
-npm run server  # 启动后端 (端口 5000)
-npm run client  # 启动前端 (端口 3000)
+# 2. Live Quiz test
+# Host: Visit http://localhost:3000
+# Create session: live-session (Live Quiz)
+# Participant: Visit http://localhost:3000/play
+# Select live-session to join
+
+# 3. Static Quiz test
+# Host: Visit http://localhost:3000
+# Create session: static-session (Static Quiz)
+# Participant: Visit http://localhost:3000/play
+# Select static-session to join
+# System automatically starts answering process
+
+# 4. Multi-user test
+# Multiple browser tabs simulate multiple users
+# Simultaneous answering tests real-time synchronization
 ```
 
-## 项目结构
+## 🛠️ Technical Architecture
 
+### Technology Stack
+```
+Frontend: React 18 + TypeScript + Vite + TailwindCSS
+Backend: Node.js + Express + Socket.IO + TypeScript
+Build: Vite + TypeScript Compiler
+Communication: WebSocket (Socket.IO)
+State Management: React Hooks + Context
+```
+
+### Project Structure
 ```
 BingoQuiz/
-├── client/                 # React前端应用
-│   ├── public/
+├── client/                 # Frontend React app
 │   ├── src/
-│   │   ├── components/     # React组件
-│   │   │   ├── Login.tsx   # 登录组件
-│   │   │   ├── Quiz.tsx    # 答题组件
-│   │   │   └── Tutorial.tsx # 使用指引组件
-│   │   ├── App.tsx         # 主应用组件
-│   │   └── index.tsx       # 入口文件
-│   └── package.json
-├── server/                 # Node.js后端
-│   ├── index.js           # 服务器主文件
-│   ├── database.sql       # 数据库结构
-│   └── import-data.js     # 数据导入脚本
-├── Example/               # 示例数据
-│   ├── Data.json          # 题目数据
-│   └── sample.png         # 设计参考图
-└── package.json
+│   │   ├── components/     # Reusable components
+│   │   ├── routes/         # Page routes
+│   │   ├── realtime/       # Socket.IO client
+│   │   ├── types.ts        # TypeScript types
+│   │   └── utils/          # Utility functions
+│   └── public/             # Static resources
+├── server/                 # Backend Node.js service
+│   ├── index.ts           # Main server file
+│   ├── sessionStore.ts    # Session state management
+│   └── types.ts           # Server type definitions
+├── public/                # Shared static resources
+│   ├── questions.json     # Default question bank
+│   └── sample-questions.json # Sample question bank
+└── docs/                  # System documentation
 ```
 
-## API接口
+### Core Components
 
-### 用户认证
-- `POST /api/register` - 用户注册
-- `POST /api/login` - 用户登录
+#### Frontend Core
+- **Host.tsx**: Live Quiz host control panel
+- **StaticQuiz.tsx**: Static Quiz host control panel
+- **Play.tsx**: Participant answering interface
+- **SessionSelector.tsx**: Session selector
+- **useQuizLive.ts**: Real-time state management Hook
+- **socketManager.ts**: WebSocket connection management
 
-### 答题功能
-- `GET /api/questions` - 获取所有题目
-- `POST /api/submit-answer` - 提交答案
-- `GET /api/score` - 获取用户分数
-- `GET /api/first-time` - 检查是否首次登录
+#### Backend Core
+- **index.ts**: Express + Socket.IO server
+- **sessionStore.ts**: In-memory session storage
+- **Socket Event Handling**: Real-time data synchronization
 
-## 使用说明
+## 📚 Documentation
 
-1. **注册/登录**: 首次使用需要注册账号
-2. **使用指引**: 首次登录会显示使用说明
-3. **开始答题**: 每道题有30秒倒计时
-4. **查看反馈**: 答题后立即显示正确/错误反馈
-5. **查看分数**: 页面顶部实时显示当前分数
+### 📖 Documentation
+- **[User Flow and Feature Design](./User%20Flow%20and%20Feature%20Design.md)**: Complete user flow explanation and feature design philosophy
 
-## 数据库表结构
+## 🔧 Development Guide
 
-### users - 用户表
-- `id`: 用户ID
-- `username`: 用户名
-- `password`: 加密密码
-- `created_at`: 创建时间
+### Development Environment Setup
 
-### questions - 题目表
-- `id`: 题目ID
-- `question`: 题目内容
-- `choices`: 选项(JSON格式)
-- `answer`: 正确答案
-- `created_at`: 创建时间
+```bash
+# Install dependencies
+npm run install-all
 
-### user_answers - 答题记录表
-- `id`: 记录ID
-- `user_id`: 用户ID
-- `question_id`: 题目ID
-- `user_answer`: 用户答案
-- `is_correct`: 是否正确
-- `time_spent`: 答题用时(秒)
-- `created_at`: 答题时间
+# Start development server
+npm run dev
 
-## 开发说明
+# Start frontend and backend separately
+npm run server:dev  # Backend development server
+npm run client:dev  # Frontend development server
+```
 
-- 前端使用React 18 + TypeScript开发
-- 后端使用Express + MySQL2
-- 使用JWT进行身份验证
-- 密码使用bcryptjs加密
-- 支持CORS跨域请求
-- 响应式设计，适配各种设备
+### Build and Deploy
 
-## 许可证
+```bash
+# Build production version
+npm run build
 
-MIT License
+# Start production server
+npm start
+```
+
+### Custom Question Bank
+
+Create JSON file with the following format:
+
+```json
+[
+  {
+    "id": "q1",
+    "index": 1,
+    "text": "Question content?",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "answer": "Correct Answer"
+  }
+]
+```
+
+### Environment Configuration
+
+Create `server/.env` file:
+```env
+PORT=3001
+CORS_ORIGIN=http://localhost:3000
+```
+
+### Extension Development
+
+#### Adding New Socket Events
+```typescript
+// Client
+socket.emit('custom:event', data);
+
+// Server
+socket.on('custom:event', (data) => {
+  // Handle logic
+});
+```
+
+#### Adding New React Components
+```typescript
+// components/NewComponent.tsx
+import React from 'react';
+
+interface NewComponentProps {
+  // Property definitions
+}
+
+export const NewComponent: React.FC<NewComponentProps> = ({ props }) => {
+  return (
+    <div className="new-component">
+      {/* Component content */}
+    </div>
+  );
+};
+```
+
+## 🧪 Testing
+
+### Functional Testing
+```bash
+# Live Quiz test
+# 1. Host creates Live Quiz session
+# 2. Participants join session
+# 3. Host sets questions
+# 4. Participants answer
+# 5. Verify real-time synchronization
+
+# Static Quiz test
+# 1. Host creates Static Quiz session
+# 2. Participants join session
+# 3. System automatically starts answering
+# 4. Participants complete all questions
+# 5. Verify automatic jump and progress display
+
+# Multi-user test
+# 1. Multiple browser tabs simulate multiple users
+# 2. Simultaneous answering tests real-time synchronization
+# 3. Verify leaderboard updates
+```
+
+### Performance Testing
+```bash
+# Connection stress test
+# Use multiple browser tabs to connect simultaneously
+
+# Memory usage monitoring
+node --inspect server/index.js
+```
+
+## 🤝 Contributing
+
+### Bug Reports
+1. Use clear titles to describe issues
+2. Provide detailed reproduction steps
+3. Include error logs and screenshots
+4. Explain expected behavior
+
+### Feature Requests
+1. Describe the purpose and value of new features
+2. Provide detailed feature descriptions
+3. Consider impact on existing functionality
+
+### Development Contributions
+1. Fork the project
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Create Pull Request
+
+## 🔒 Security Considerations
+
+- Recommended for use in internal networks
+- Regularly update dependencies to fix security vulnerabilities
+- Implement appropriate access control and monitoring
+
+## 📝 Changelog
+
+### v2.0.0 (2024-01-15)
+- ✨ Added Static Quiz mode
+- 📊 Added answering progress display
+- ⏱️ Implemented 3-second feedback delay
+- 🎯 Optimized Live Quiz control panel
+- 🔧 Improved type detection logic
+- 📱 Enhanced responsive design
+
+### v1.0.0 (2024-01-01)
+- 🎉 Initial version release
+- ✨ Real-time quiz core functionality
+- 🎮 Live Quiz mode
+- 📱 Responsive design
+- 🔒 Basic anti-cheating mechanism
+
+## 📞 Support and Feedback
+
+- **Documentation Issues**: Check detailed documentation in `docs/` directory
+- **Technical Support**: Submit GitHub Issues
+- **Feature Suggestions**: Propose through Issues or Discussions
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+**🎯 Start Your BingoQuiz Journey!**
+
+If you find this project useful, please give us a ⭐ Star!
