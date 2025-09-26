@@ -4,7 +4,7 @@ export type Question = {
   text: string;
   options: string[];
   answer: string;
-  timeLimit?: number;
+  // timeLimit已移除，所有题目使用Session的defaultTimeLimit
 };
 
 export type SessionOptions = {

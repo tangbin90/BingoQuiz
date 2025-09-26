@@ -313,7 +313,7 @@ export const HostEntry: React.FC = () => {
                           Q{question.index}: {question.text}
                         </div>
                         <div className="text-xs text-gray-500 mt-1">
-                          Time Limit: {question.timeLimit || sessionOptions.defaultTimeLimit}s
+                          Time Limit: {sessionOptions.defaultTimeLimit}s
                         </div>
                       </div>
                       <div className="ml-3">

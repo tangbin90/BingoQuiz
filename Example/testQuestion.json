@@ -1,0 +1,122 @@
+[
+  {
+    "id": "test_q1",
+    "index": 1,
+    "text": "Which ancient Greek philosopher is known as the 'Father of Philosophy'?",
+    "options": [
+      "Plato",
+      "Aristotle", 
+      "Socrates",
+      "Pythagoras"
+    ],
+    "answer": "Socrates"
+  },
+  {
+    "id": "test_q2",
+    "index": 2,
+    "text": "What is the main work of Plato called?",
+    "options": [
+      "The Republic",
+      "Nicomachean Ethics",
+      "Meditations",
+      "Beyond Good and Evil"
+    ],
+    "answer": "The Republic"
+  },
+  {
+    "id": "test_q3",
+    "index": 3,
+    "text": "Which philosopher wrote 'Critique of Pure Reason'?",
+    "options": [
+      "Immanuel Kant",
+      "Georg Wilhelm Friedrich Hegel",
+      "Friedrich Nietzsche",
+      "René Descartes"
+    ],
+    "answer": "Immanuel Kant"
+  },
+  {
+    "id": "test_q4",
+    "index": 4,
+    "text": "Who is known for the statement 'I think, therefore I am'?",
+    "options": [
+      "Thomas Hobbes",
+      "Blaise Pascal",
+      "René Descartes",
+      "David Hume"
+    ],
+    "answer": "René Descartes"
+  },
+  {
+    "id": "test_q5",
+    "index": 5,
+    "text": "Which work is Aristotle famous for in the field of ethics?",
+    "options": [
+      "The Nicomachean Ethics",
+      "The Politics",
+      "The Republic",
+      "Summa Theologica"
+    ],
+    "answer": "The Nicomachean Ethics"
+  },
+  {
+    "id": "test_q6",
+    "index": 6,
+    "text": "Which philosopher is best known for his concept of the 'Ubermensch' (Overman)?",
+    "options": [
+      "Friedrich Nietzsche",
+      "Karl Marx",
+      "Søren Kierkegaard",
+      "Jean-Paul Sartre"
+    ],
+    "answer": "Friedrich Nietzsche"
+  },
+  {
+    "id": "test_q7",
+    "index": 7,
+    "text": "Who wrote 'Being and Nothingness', a foundational text in existentialism?",
+    "options": [
+      "Albert Camus",
+      "Martin Heidegger",
+      "Jean-Paul Sartre",
+      "Simone de Beauvoir"
+    ],
+    "answer": "Jean-Paul Sartre"
+  },
+  {
+    "id": "test_q8",
+    "index": 8,
+    "text": "Which philosopher is often credited with founding utilitarianism?",
+    "options": [
+      "John Stuart Mill",
+      "Jeremy Bentham",
+      "Immanuel Kant",
+      "David Hume"
+    ],
+    "answer": "Jeremy Bentham"
+  },
+  {
+    "id": "test_q9",
+    "index": 9,
+    "text": "What is the name of the ethical theory that emphasizes duty and moral rules, as developed by Kant?",
+    "options": [
+      "Consequentialism",
+      "Utilitarianism",
+      "Deontological Ethics",
+      "Virtue Ethics"
+    ],
+    "answer": "Deontological Ethics"
+  },
+  {
+    "id": "test_q10",
+    "index": 10,
+    "text": "Which philosopher is associated with the allegory of the cave?",
+    "options": [
+      "Socrates",
+      "Plato",
+      "Aristotle",
+      "Epicurus"
+    ],
+    "answer": "Plato"
+  }
+]

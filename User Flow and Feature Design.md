@@ -24,11 +24,9 @@
    - View session information
    - Select and set questions
    - Control timer
-   - Manage participants
    ↓
 4. Real-time control of answering process
    - Start/pause/resume timer
-   - Lock/unlock answer submission
    - Manual question navigation
    - View real-time leaderboard
    ↓

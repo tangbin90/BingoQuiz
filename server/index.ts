@@ -73,7 +73,7 @@ const advanceToNextQuestion = (sessionId: string, session: any, io: any) => {
     const nextQuestion = session.questions[nextIndex];
     session.currentQuestion = nextQuestion;
     session.startedAt = Date.now();
-    session.timeLimit = nextQuestion.timeLimit || session.options?.defaultTimeLimit || 15;
+    session.timeLimit = session.options?.defaultTimeLimit || 15;
     
     console.log(`➡️ Static Quiz advancing to question ${nextIndex + 1}: ${nextQuestion.text}`);
     console.log(`⏰ New question startedAt: ${new Date(session.startedAt).toLocaleTimeString()}, timeLimit: ${session.timeLimit}s`);
@@ -113,24 +113,21 @@ const defaultQuestions: Question[] = [
     index: 1,
     text: 'Which philosopher proposed the "veil of ignorance"?',
     options: ['Immanuel Kant', 'John Stuart Mill', 'John Rawls', 'Robert Nozick'],
-    answer: 'John Rawls',
-    timeLimit: 15
+    answer: 'John Rawls'
   },
   {
     id: 'q2',
     index: 2,
     text: 'What is the main principle of utilitarianism?',
     options: ['Greatest happiness for the greatest number', 'Categorical imperative', 'Social contract', 'Virtue ethics'],
-    answer: 'Greatest happiness for the greatest number',
-    timeLimit: 20
+    answer: 'Greatest happiness for the greatest number'
   },
   {
     id: 'q3',
     index: 3,
     text: 'Who wrote "The Republic"?',
     options: ['Aristotle', 'Plato', 'Socrates', 'Confucius'],
-    answer: 'Plato',
-    timeLimit: 10
+    answer: 'Plato'
   }
 ];
 
@@ -364,7 +361,7 @@ io.on('connection', (socket) => {
       session.currentQuestion = undefined; // 不设置默认问题，等待管理员选择
     } else {
       // Static Quiz不设置startedAt，等参与者加入时设置
-      session.timeLimit = session.currentQuestion?.timeLimit || sessionOptions.defaultTimeLimit;
+      session.timeLimit = sessionOptions.defaultTimeLimit;
     }
     
     // 广播状态更新
@@ -414,7 +411,7 @@ io.on('connection', (socket) => {
       console.log('Setting question to:', targetQuestion.text);
       session.currentQuestion = targetQuestion;
       session.startedAt = Date.now();
-      session.timeLimit = targetQuestion.timeLimit || session.options.defaultTimeLimit;
+      session.timeLimit = session.options.defaultTimeLimit;
       sessionStore.clearCurrentQuestionAnswers(sessionId);
       
       const updatedSession = sessionStore.updateSession(sessionId, {});
@@ -448,7 +445,7 @@ io.on('connection', (socket) => {
     if (nextQuestion) {
       session.currentQuestion = nextQuestion;
       session.startedAt = Date.now();
-      session.timeLimit = nextQuestion.timeLimit || session.options.defaultTimeLimit;
+      session.timeLimit = session.options.defaultTimeLimit;
       sessionStore.clearCurrentQuestionAnswers(sessionId);
       
       const updatedSession = sessionStore.updateSession(sessionId, {});
@@ -479,7 +476,7 @@ io.on('connection', (socket) => {
     if (prevQuestion) {
       session.currentQuestion = prevQuestion;
       session.startedAt = Date.now();
-      session.timeLimit = prevQuestion.timeLimit || session.options.defaultTimeLimit;
+      session.timeLimit = session.options.defaultTimeLimit;
       sessionStore.clearCurrentQuestionAnswers(sessionId);
       
       const updatedSession = sessionStore.updateSession(sessionId, {});

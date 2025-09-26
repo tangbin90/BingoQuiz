@@ -4,7 +4,7 @@ export type Question = {
   text: string;           // 题干
   options: string[];      // 原始选项（未打乱）
   answer: string;         // 正确答案（与 options 中某一项一致）
-  timeLimit?: number;     // 每题时长（秒），默认 15
+  // timeLimit已移除，所有题目使用Session的defaultTimeLimit
 };
 
 export type SessionOptions = {
